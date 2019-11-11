@@ -77,15 +77,14 @@ open class BalloonMarker: MarkerView {
 
         } else {
             
-            rect.origin.y -= _size.height
+            rect.origin.y -= _size.height / 2;
             
-            if point.x - _size.width / 2.0 < 0 {
+            if point.x < 0 {
                 drawLeftRect(context: context, rect: rect)
-            } else if (chart != nil && point.x + width - _size.width / 2.0 > (chart?.bounds.width)!) {
+            } else if (chart != nil && point.x + width > (chart?.bounds.width)!) {
                 rect.origin.x -= _size.width
                 drawRightRect(context: context, rect: rect)
             } else {
-                rect.origin.x -= _size.width / 2.0
                 drawCenterRect(context: context, rect: rect)
             }
             
@@ -198,7 +197,17 @@ open class BalloonMarker: MarkerView {
 
         UIGraphicsPopContext()
 
+        drawCircle(context: context, center: point, radius: 12, color: UIColor.white)
+        drawCircle(context: context, center: point, radius: 6, color: UIColor.init(red: 1, green: 96/255, blue: 0, alpha: 1))
         context.restoreGState()
+    }
+    
+    private func drawCircle(context: CGContext, center: CGPoint, radius: CGFloat, color: UIColor) {
+        UIGraphicsPushContext(context)
+        context.setFillColor(color.cgColor)
+        context.addEllipse(in: CGRect.init(origin: center, size: CGSize.init(width: radius, height: radius)).offsetBy(dx: -radius/2, dy: -radius/2))
+        context.fillPath()
+        UIGraphicsPopContext()
     }
 
     open override func refreshContent(entry: ChartDataEntry, highlight: Highlight) {

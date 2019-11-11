@@ -1,11 +1,15 @@
 package com.github.wuxudong.rncharts.markers;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.text.TextUtils;
 import android.widget.TextView;
 
+import com.facebook.react.uimanager.PixelUtil;
 import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.data.CandleEntry;
@@ -30,12 +34,19 @@ public class RNRectangleMarkerView extends MarkerView {
     private Drawable backgroundTop = ResourcesCompat.getDrawable(getResources(), R.drawable.rectangle_marker_top, null);
     private Drawable backgroundTopRight = ResourcesCompat.getDrawable(getResources(), R.drawable.rectangle_marker_top_right, null);
 
+    private Paint mPaint;
+    private Paint mInnerPaint;
     private int digits = 0;
+    private static final float MarkerCircleWidth = PixelUtil.toPixelFromDIP(6);
 
     public RNRectangleMarkerView(Context context) {
         super(context, R.layout.rectangle_marker);
 
         tvContent = (TextView) findViewById(R.id.rectangle_tvContent);
+        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaint.setColor(Color.WHITE);
+        mInnerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mInnerPaint.setColor(Color.rgb(255, 96, 0));
     }
 
     public void setDigits(int digits) {
@@ -78,7 +89,7 @@ public class RNRectangleMarkerView extends MarkerView {
 
     @Override
     public MPPointF getOffset() {
-        return new MPPointF(-(getWidth() / 2), -getHeight());
+        return new MPPointF(0, -getHeight());
     }
 
     @Override
@@ -87,9 +98,10 @@ public class RNRectangleMarkerView extends MarkerView {
         MPPointF offset = getOffset();
 
         MPPointF offset2 = new MPPointF();
+        float height = getHeight();
 
         offset2.x = offset.x;
-        offset2.y = offset.y;
+        offset2.y = - height/2;
 
         Chart chart = getChartView();
 
@@ -115,15 +127,23 @@ public class RNRectangleMarkerView extends MarkerView {
                 tvContent.setBackground(backgroundRight);
             }
         } else {
+            offset2.x = 0;
             if (posY + offset2.y < 0) {
                 offset2.y = 0;
-                tvContent.setBackground(backgroundTop);
+                tvContent.setBackground(backgroundTopLeft);
             } else {
-                tvContent.setBackground(background);
+                tvContent.setBackground(backgroundLeft);
             }
         }
 
         return offset2;
+    }
+
+    @Override
+    public void draw(Canvas canvas, float posX, float posY) {
+        super.draw(canvas, posX, posY);
+        canvas.drawCircle(posX, posY, MarkerCircleWidth, mPaint);
+        canvas.drawCircle(posX, posY, MarkerCircleWidth / 2, mInnerPaint);
     }
 
     public TextView getTvContent() {

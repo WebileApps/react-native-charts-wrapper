@@ -19,7 +19,7 @@ class RNLineChartView: RNBarLineChartViewBase {
     
     override init(frame: CoreGraphics.CGRect) {
         
-        self._chart = LineChartView(frame: frame)
+        self._chart = LineChartOnlyHighlightDrag(frame: frame)
         self._dataExtract = LineDataExtract()
         
         super.init(frame: frame);
@@ -34,3 +34,15 @@ class RNLineChartView: RNBarLineChartViewBase {
     }
     
 }
+
+class LineChartOnlyHighlightDrag: LineChartView
+{
+    open override var isFullyZoomedOut: Bool {
+        return true;
+    }
+    
+    open override var hasNoDragOffset: Bool {
+        return true;
+    }
+}
+
