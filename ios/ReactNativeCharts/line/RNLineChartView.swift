@@ -33,6 +33,21 @@ class RNLineChartView: RNBarLineChartViewBase {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
+        super.chartValueSelected(chartView, entry: entry, highlight: highlight);
+        let count = chartView.data?.dataSetCount ?? 0;
+        var highlights = [Highlight]()
+        for i in stride(from: 0, to: count, by: 1) {
+            let y = chartView.data?.getDataSetByIndex(i)?.entryForXValue(entry.x, closestToY: 0)?.y ?? 0;
+            highlights.append(Highlight(x: entry.x, y: y, dataSetIndex: i))
+        }
+        chartView.highlightValues(highlights);
+    }
+    
+    override func chartValueNothingSelected(_ chartView: ChartViewBase) {
+        super.chartValueNothingSelected(chartView);
+        chartView.highlightValues([]);
+    }
 }
 
 class LineChartOnlyHighlightDrag: LineChartView

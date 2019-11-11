@@ -4,6 +4,8 @@ package com.github.wuxudong.rncharts.charts;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.github.wuxudong.rncharts.data.DataExtract;
 import com.github.wuxudong.rncharts.data.LineDataExtract;
@@ -19,7 +21,7 @@ public class LineChartManager extends BarLineChartBaseManager<LineChart, Entry> 
 
     @Override
     protected LineChart createViewInstance(ThemedReactContext reactContext) {
-        LineChart lineChart =  new LineChart(reactContext) {
+        final LineChart lineChart =  new LineChart(reactContext) {
             @Override
             protected void init() {
 
@@ -39,6 +41,22 @@ public class LineChartManager extends BarLineChartBaseManager<LineChart, Entry> 
             }
         };
         lineChart.setOnChartValueSelectedListener(new RNOnChartValueSelectedListener(lineChart));
+        lineChart.setOnChartValueSelectedListener(new RNOnChartValueSelectedListener(lineChart) {
+            @Override
+            public void onValueSelected(Entry entry, Highlight h) {
+                LineData data = lineChart.getData();
+                Highlight[] highs = new Highlight[data.getDataSetCount()];
+                for (int i= 0; i< data.getDataSetCount(); i++) {
+                    highs[i] = new Highlight(entry.getX(), data.getDataSetByIndex(i).getEntryForXValue(entry.getX(), 0).getY(), i);
+                }
+                lineChart.highlightValues(highs);
+            }
+
+            @Override
+            public void onNothingSelected() {
+                lineChart.highlightValues(new Highlight[]{});
+            }
+        });
         lineChart.setOnChartGestureListener(new RNOnChartGestureListener(lineChart));
         return lineChart;
     }
