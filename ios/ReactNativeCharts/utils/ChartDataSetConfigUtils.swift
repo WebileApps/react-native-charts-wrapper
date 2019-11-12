@@ -94,6 +94,7 @@ class ChartDataSetConfigUtils: NSObject {
 
         if config["drawHorizontalHighlightIndicator"].bool != nil {
             dataSet.drawHorizontalHighlightIndicatorEnabled = config["drawHorizontalHighlightIndicator"].boolValue;
+            dataSet.highlightLineDashLengths = [4.0, 4.0];
         }
 
         if config["highlightLineWidth"].float != nil {

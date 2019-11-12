@@ -112,6 +112,7 @@ public class ChartDataSetConfigUtils {
         }
         if (BridgeUtils.validate(config, ReadableType.Boolean, "drawHorizontalHighlightIndicator")) {
             dataSet.setDrawHorizontalHighlightIndicator(config.getBoolean("drawHorizontalHighlightIndicator"));
+            dataSet.enableDashedHighlightLine(10, 10, 0);
         }
         if (BridgeUtils.validate(config, ReadableType.Number, "highlightLineWidth")) {
             dataSet.setHighlightLineWidth((float) config.getDouble("highlightLineWidth"));
