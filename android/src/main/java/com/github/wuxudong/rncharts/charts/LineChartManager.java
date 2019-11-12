@@ -40,10 +40,10 @@ public class LineChartManager extends BarLineChartBaseManager<LineChart, Entry> 
                 super.init();
             }
         };
-        lineChart.setOnChartValueSelectedListener(new RNOnChartValueSelectedListener(lineChart));
         lineChart.setOnChartValueSelectedListener(new RNOnChartValueSelectedListener(lineChart) {
             @Override
             public void onValueSelected(Entry entry, Highlight h) {
+                super.onValueSelected(entry, h);
                 LineData data = lineChart.getData();
                 Highlight[] highs = new Highlight[data.getDataSetCount()];
                 for (int i= 0; i< data.getDataSetCount(); i++) {
@@ -54,6 +54,7 @@ public class LineChartManager extends BarLineChartBaseManager<LineChart, Entry> 
 
             @Override
             public void onNothingSelected() {
+                super.onNothingSelected();
                 lineChart.highlightValues(new Highlight[]{});
             }
         });
