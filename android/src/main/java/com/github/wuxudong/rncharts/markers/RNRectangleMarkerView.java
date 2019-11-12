@@ -46,7 +46,6 @@ public class RNRectangleMarkerView extends MarkerView {
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setColor(Color.WHITE);
         mInnerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mInnerPaint.setColor(Color.rgb(255, 96, 0));
     }
 
     public void setDigits(int digits) {
@@ -57,6 +56,15 @@ public class RNRectangleMarkerView extends MarkerView {
     public void refreshContent(Entry e, Highlight highlight) {
         String text;
 
+        if (highlight.getDataSetIndex() == 0) {
+            mInnerPaint.setColor(Color.rgb(12, 97, 114));
+        } else if (highlight.getDataSetIndex() == 1) {
+            mInnerPaint.setColor(Color.rgb(57, 109, 58));
+        } else if (highlight.getDataSetIndex() == 2) {
+            mInnerPaint.setColor(Color.rgb(120, 40, 44));
+        } else {
+            mInnerPaint.setColor(Color.rgb(255, 96, 0));
+        }
         if (e instanceof CandleEntry) {
             CandleEntry ce = (CandleEntry) e;
             text = Utils.formatNumber(ce.getClose(), digits, false);

@@ -34,7 +34,7 @@ open class BalloonMarker: MarkerView {
     fileprivate var _size: CGSize = CGSize()
     fileprivate var _paragraphStyle: NSMutableParagraphStyle?
     fileprivate var _drawAttributes = [NSAttributedString.Key: Any]()
-
+    fileprivate var _highlightColor : UIColor = UIColor.init(red: 1, green: 96/255, blue: 0, alpha: 1)
 
     public init(color: UIColor, font: UIFont, textColor: UIColor) {
         super.init(frame: CGRect.zero);
@@ -197,8 +197,8 @@ open class BalloonMarker: MarkerView {
 
         UIGraphicsPopContext()
 
-        drawCircle(context: context, center: point, radius: 12, color: UIColor.white)
-        drawCircle(context: context, center: point, radius: 6, color: UIColor.init(red: 1, green: 96/255, blue: 0, alpha: 1))
+        drawCircle(context: context, center: point, radius: 10, color: UIColor.white)
+        drawCircle(context: context, center: point, radius: 5, color: _highlightColor)
         context.restoreGState()
     }
     
@@ -219,6 +219,16 @@ open class BalloonMarker: MarkerView {
             label = candleEntry.close.description
         } else {
             label = entry.y.description
+        }
+        
+        if (highlight.dataSetIndex == 0) {
+            _highlightColor = UIColor.init(red: 12/255, green: 97/255, blue: 114/255, alpha: 1.0);
+        } else if (highlight.dataSetIndex == 1) {
+            _highlightColor = UIColor.init(red: 57/255, green: 109/255, blue: 58/255, alpha: 1.0);
+        } else if (highlight.dataSetIndex == 2) {
+            _highlightColor = UIColor.init(red: 120/255, green: 40/255, blue: 44/255, alpha: 1.0);
+        } else {
+            _highlightColor = UIColor.init(red: 1, green: 96/255, blue: 0, alpha: 1.0);
         }
 
         if let object = entry.data as? JSON {
