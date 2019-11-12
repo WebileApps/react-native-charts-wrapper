@@ -428,7 +428,9 @@ public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends
             String valueFormatter = propMap.getString("valueFormatter");
 
             if ("largeValue".equals(valueFormatter)) {
-                axis.setValueFormatter(new LargeValueFormatter());
+                LargeValueFormatter formatter = new LargeValueFormatter();
+                formatter.setMaxLength(3);
+                axis.setValueFormatter(formatter);
             } else if ("percent".equals(valueFormatter)) {
                 axis.setValueFormatter(new PercentFormatter());
             } else if ("date".equals(valueFormatter)) {
