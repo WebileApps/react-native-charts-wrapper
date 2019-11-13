@@ -26,8 +26,8 @@ open class BalloonMarker: MarkerView {
     open var minimumSize = CGSize()
 
     
-    fileprivate var insets = UIEdgeInsets(top: 8.0,left: 8.0,bottom: 20.0,right: 8.0)
-    fileprivate var topInsets = UIEdgeInsets(top: 20.0,left: 8.0,bottom: 8.0,right: 8.0)
+    fileprivate var insets = UIEdgeInsets(top: 0,left: 8.0,bottom: 0.0,right: 8.0)
+    fileprivate var topInsets = UIEdgeInsets(top: 0.0,left: 8.0,bottom: 0.0,right: 8.0)
     
     fileprivate var labelns: NSString?
     fileprivate var _labelSize: CGSize = CGSize()
@@ -60,38 +60,17 @@ open class BalloonMarker: MarkerView {
 
         var rect = CGRect(origin: point, size: _size)
         
-        if point.y - _size.height < 0 {
-          
-            if point.x - _size.width / 2.0 < 0 {
-                drawTopLeftRect(context: context, rect: rect)
-            } else if (chart != nil && point.x + width - _size.width / 2.0 > (chart?.bounds.width)!) {
-                rect.origin.x -= _size.width
-                drawTopRightRect(context: context, rect: rect)
-            } else {
-                rect.origin.x -= _size.width / 2.0
-                drawTopCenterRect(context: context, rect: rect)
-            }
-            
-            rect.origin.y += self.topInsets.top
-            rect.size.height -= self.topInsets.top + self.topInsets.bottom
-
+        rect.origin.y -= _size.height
+        
+        if (chart != nil && point.x + width > (chart?.bounds.width)!) {
+            rect.origin.x -= _size.width
+            drawRightRect(context: context, rect: rect)
         } else {
-            
-            rect.origin.y -= _size.height / 2;
-            
-            if point.x < 0 {
-                drawLeftRect(context: context, rect: rect)
-            } else if (chart != nil && point.x + width > (chart?.bounds.width)!) {
-                rect.origin.x -= _size.width
-                drawRightRect(context: context, rect: rect)
-            } else {
-                drawCenterRect(context: context, rect: rect)
-            }
-            
-            rect.origin.y += self.insets.top
-            rect.size.height -= self.insets.top + self.insets.bottom
-
+            drawLeftRect(context: context, rect: rect)
         }
+        
+        rect.origin.y += self.insets.top
+        rect.size.height -= self.insets.top + self.insets.bottom
         
         return rect
     }
