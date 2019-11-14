@@ -97,7 +97,7 @@ public class RNRectangleMarkerView extends MarkerView {
 
     @Override
     public MPPointF getOffset() {
-        return new MPPointF(0, -getHeight());
+        return new MPPointF(0, 0);
     }
 
     @Override
@@ -107,9 +107,8 @@ public class RNRectangleMarkerView extends MarkerView {
 
         MPPointF offset2 = new MPPointF();
         float height = getHeight();
-
         offset2.x = offset.x;
-        offset2.y = - height/2;
+        offset2.y = offset.y - height/ 2;
 
         Chart chart = getChartView();
 
@@ -117,31 +116,8 @@ public class RNRectangleMarkerView extends MarkerView {
 
         if (posX + offset2.x < 0) {
             offset2.x = 0;
-
-            if (posY + offset2.y < 0) {
-                offset2.y = 0;
-                tvContent.setBackground(backgroundTopLeft);
-            } else {
-                tvContent.setBackground(backgroundLeft);
-            }
-
         } else if (chart != null && posX + width + offset2.x > chart.getWidth()) {
             offset2.x = -width;
-
-            if (posY + offset2.y < 0) {
-                offset2.y = 0;
-                tvContent.setBackground(backgroundTopRight);
-            } else {
-                tvContent.setBackground(backgroundRight);
-            }
-        } else {
-            offset2.x = 0;
-            if (posY + offset2.y < 0) {
-                offset2.y = 0;
-                tvContent.setBackground(backgroundTopLeft);
-            } else {
-                tvContent.setBackground(backgroundLeft);
-            }
         }
 
         return offset2;

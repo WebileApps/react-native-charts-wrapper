@@ -60,7 +60,7 @@ open class BalloonMarker: MarkerView {
 
         var rect = CGRect(origin: point, size: _size)
         
-        rect.origin.y -= _size.height
+        rect.origin.y -= _size.height/2;
         
         if (chart != nil && point.x + width > (chart?.bounds.width)!) {
             rect.origin.x -= _size.width
