@@ -137,7 +137,7 @@ class LineChartOnlyHighlightDrag: LineChartView
         let labelSize = labelns.size(withAttributes: labelAttrs) ;
         let rect = CGRect(x: min(viewPortHandler.contentRight - labelSize.width - 5, pos.x - labelSize.width / 2), y: viewPortHandler.contentTop, width: labelSize.width , height: labelSize.height );
         context.addRect(rect.insetBy(dx: -6, dy: -2));
-        context.setLineWidth(1.0);
+        context.setLineWidth(0.5);
         context.setStrokeColor(UIColor.white.cgColor);
         context.setFillColor(UIColor.black.cgColor);
         context.drawPath(using: CGPathDrawingMode.fillStroke);

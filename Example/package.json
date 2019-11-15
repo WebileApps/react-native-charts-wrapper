@@ -5,7 +5,7 @@
   "scripts": {
     "start": "react-native start",
     "android": "react-native run-android",
-    "ios": "react-native run-ios",
+    "ios": "react-native run-ios --simulator \"iPhone 11\"",
     "test": "node node_modules/jest/bin/jest.js --watch",
     "postinstall": "sed -i '' 's/#import <RCTAnimation\\/RCTValueAnimatedNode.h>/#import \"RCTValueAnimatedNode.h\"/' ./node_modules/react-native/Libraries/NativeAnimation/RCTNativeAnimatedNodesManager.h && rm -rf node_modules/react-native-charts-wrapper/Example"
   },

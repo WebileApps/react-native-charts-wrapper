@@ -98,7 +98,7 @@ public class LineChartManager extends BarLineChartBaseManager<LineChart, Entry> 
                             return;
                         }
 
-                        mHightlightLabelPaint.setStrokeWidth(Utils.convertDpToPixel(1));
+                        mHightlightLabelPaint.setStrokeWidth(Utils.convertDpToPixel(0.5f));
                         String formattedLabel = mXAxis.getValueFormatter().getAxisLabel(e.getX(), mXAxis);
                         float width = Utils.calcTextWidth(mXAxisRenderer.getPaintAxisLabels(), formattedLabel) + Utils.convertDpToPixel(10);
 

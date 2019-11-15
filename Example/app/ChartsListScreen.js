@@ -31,7 +31,7 @@ import GroupBarChartScreen from './GroupBarChartScreen';
 import InfiniteScrollLineChartScreen from './InfiniteScrollLineChartScreen';
 import LinkageChartScreen from './LinkageChartScreen';
 import StockChartScreen from './StockChartScreen';
-
+import DashboardScreen from "./DashboardScreen";
 
 const styles = StyleSheet.create({
   item: {
@@ -60,6 +60,11 @@ const styles = StyleSheet.create({
 });
 
 var ExampleRoutes = {
+  DashboardScreen : {
+    name: 'Reganto Dashboard',
+    screen: DashboardScreen,
+    description: 'Dashboard and slider'
+  },
   PieChartScreen: {
     name: 'PieChart',
     screen: PieChartScreen,

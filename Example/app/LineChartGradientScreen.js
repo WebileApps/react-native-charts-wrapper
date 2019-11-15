@@ -13,6 +13,8 @@ import { LineChart } from "react-native-charts-wrapper";
 
 const greenBlue = "rgb(26, 182, 151)";
 const petrel = "rgb(59, 145, 153)";
+const SIZE = 40;
+const values = new Array(SIZE).fill(0).map((item, index) => 10 + index % 10);
 
 class LineChartScreen extends React.Component {
   constructor() {
@@ -43,53 +45,22 @@ class LineChartScreen extends React.Component {
         <View style={styles.container}>
           <LineChart
             style={styles.chart}
+            chartBackgroundColor={processColor("transparent")}
             data={{
               dataSets: [
                 {
-                  values: [
-                    {
-                      y: 65,
-                      x: 0,
-                      marker: "65 kg"
-                    },
-                    {
-                      y: 77,
-                      x: 1,
-                      marker: "77 kg"
-                    },
-                    {
-                      y: 76,
-                      x: 2,
-                      marker: "76 kg"
-                    },
-                    {
-                      y: 74,
-                      x: 3,
-                      marker: "74 kg"
-                    },
-                    {
-                      y: 76,
-                      x: 4,
-                      marker: "76 kg"
-                    },
-                    {
-                      y: 65,
-                      x: 5,
-                      marker: "Today: 65 kg"
-                    }
-                  ],
+                  values: values.map((value, index) => ({x : index, y: value, marker : `${value} Kg`})),
                   label: "",
                   config: {
-                    mode: "CUBIC_BEZIER",
                     drawValues: false,
                     lineWidth: 2,
-                    drawCircles: true,
+                    drawCircles: false,
                     circleColor: processColor(petrel),
-                    drawCircleHole: false,
+                    drawCircleHole: true,
                     circleRadius: 5,
                     highlightColor: processColor("transparent"),
-                    color: processColor(petrel),
-                    drawFilled: true,
+                    color: processColor("white"),
+                    drawFilled: false,
                     fillGradient: {
                       colors: [processColor(petrel), processColor(greenBlue)],
                       positions: [0, 0.5],
@@ -100,62 +71,6 @@ class LineChartScreen extends React.Component {
                     valueTextSize: 15
                   }
                 },
-
-                {
-                  values: [
-                    {
-                      y: 35,
-                      x: 0,
-                      marker: "35 kg"
-                    },
-                    {
-                      y: 47,
-                      x: 1,
-                      marker: "47 kg"
-                    },
-                    {
-                      y: 46,
-                      x: 2,
-                      marker: "46 kg"
-                    },
-                    {
-                      y: 44,
-                      x: 3,
-                      marker: "44 kg"
-                    },
-                    {
-                      y: 46,
-                      x: 4,
-                      marker: "46 kg"
-                    },
-                    {
-                      y: 35,
-                      x: 5,
-                      marker: "Today: 35 kg"
-                    }
-                  ],
-                  label: "",
-                  config: {
-                    mode: "CUBIC_BEZIER",
-                    drawValues: false,
-                    lineWidth: 2,
-                    drawCircles: true,
-                    circleColor: processColor(petrel),
-                    drawCircleHole: false,
-                    circleRadius: 5,
-                    highlightColor: processColor("transparent"),
-                    color: processColor(petrel),
-                    drawFilled: true,
-                    fillGradient: {
-                      colors: [processColor('red'), processColor('yellow')],
-                      positions: [0, 0.5],
-                      angle: 90,
-                      orientation: "TOP_BOTTOM"
-                    },
-                    fillAlpha: 1000,
-                    valueTextSize: 15
-                  }
-                }
               ]
             }}
             chartDescription={{ text: "" }}
@@ -164,7 +79,7 @@ class LineChartScreen extends React.Component {
             }}
             marker={{
               enabled: true,
-              markerColor: processColor("white"),
+              markerColor: processColor("transparent"),
               textColor: processColor("black")
             }}
             xAxis={{
@@ -194,14 +109,20 @@ class LineChartScreen extends React.Component {
               durationY: 1500,
               easingY: "EaseInOutQuart"
             }}
-            drawGridBackground={false}
+            drawGridBackground={true}
             drawBorders={false}
             touchEnabled={true}
-            dragEnabled={false}
+            dragEnabled={true}
             scaleEnabled={false}
             scaleXEnabled={false}
             scaleYEnabled={false}
             pinchZoom={false}
+            zoom={{
+              scaleX: 2,
+              scaleY: 1,
+              xValue: SIZE,
+              yValue: 0
+            }}
             doubleTapToZoomEnabled={false}
             dragDecelerationEnabled={true}
             dragDecelerationFrictionCoef={0.99}
@@ -222,7 +143,7 @@ const styles = StyleSheet.create({
     padding: 20
   },
   chart: {
-    height: 250
+    flex: 1,
   }
 });
 
