@@ -43,6 +43,7 @@ public class RNRectangleMarkerView extends MarkerView {
         super(context, R.layout.rectangle_marker);
 
         tvContent = (TextView) findViewById(R.id.rectangle_tvContent);
+        tvContent.setPadding((int)Utils.convertDpToPixel(7), 0, (int)Utils.convertDpToPixel(7), 0);
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setColor(Color.WHITE);
         mInnerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);

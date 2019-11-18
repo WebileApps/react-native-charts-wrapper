@@ -111,7 +111,7 @@ public class LineChartManager extends BarLineChartBaseManager<LineChart, Entry> 
 
                         mHightlightLabelPaint.setStyle(Paint.Style.STROKE);
                         mHightlightLabelPaint.setColor(Color.WHITE);
-                        c.drawRect(new RectF(originX, mViewPortHandler.contentTop(), originX + width, mViewPortHandler.contentTop() + Utils.convertDpToPixel(15)),mHightlightLabelPaint);
+                        c.drawRect(new RectF(originX, mViewPortHandler.contentTop()+1, originX + width, mViewPortHandler.contentTop() + Utils.convertDpToPixel(15)),mHightlightLabelPaint);
 
                         Utils.drawXAxisValue(c, formattedLabel, originX + Utils.convertDpToPixel(5), mViewPortHandler.contentTop() + Utils.convertDpToPixel(2), mXAxisRenderer.getPaintAxisLabels(), MPPointF.getInstance(0,0), 0);
                         c.restore();
