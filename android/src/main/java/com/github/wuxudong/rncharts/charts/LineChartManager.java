@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.view.MotionEvent;
 
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.github.mikephil.charting.charts.LineChart;
@@ -13,6 +14,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineScatterCandleRadarDataSet;
+import com.github.mikephil.charting.listener.BarLineChartTouchListener;
 import com.github.mikephil.charting.renderer.LineChartRenderer;
 import com.github.mikephil.charting.renderer.XAxisRenderer;
 import com.github.mikephil.charting.utils.MPPointF;
@@ -52,6 +54,18 @@ public class LineChartManager extends BarLineChartBaseManager<LineChart, Entry> 
                 };
 
                 super.init();
+
+                this.setOnTouchListener(new BarLineChartTouchListener(this, mViewPortHandler.getMatrixTouch(), 3f){
+                    @Override
+                    protected void performHighlight(Highlight h, MotionEvent e) {
+
+                        if (mViewPortHandler.isInBounds(e.getX(), e.getY())) {
+                            if (!h.equalTo(mLastHighlighted)) {
+                                super.performHighlight(h, e);
+                            }
+                        }
+                    }
+                });
 
                 this.setXAxisRenderer( new XAxisRenderer(this.mViewPortHandler, this.mXAxis, this.mLeftAxisTransformer) {
                     /**

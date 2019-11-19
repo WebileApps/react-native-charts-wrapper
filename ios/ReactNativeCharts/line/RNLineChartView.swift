@@ -115,6 +115,23 @@ class LineChartOnlyHighlightDrag: LineChartView
         }
     }
     
+    override func getHighlightByTouchPoint(_ pt: CGPoint) -> Highlight? {
+        if (viewPortHandler.isInBoundsX(pt.x)) {
+            let highlight = super.getHighlightByTouchPoint(pt);
+            if (!(highlight?.isEqual(lastHighlighted) ?? true)) {
+                return highlight;
+            }
+        }
+        return lastHighlighted;
+    }
+    
+    override func highlightValue(_ highlight: Highlight?, callDelegate: Bool) {
+        if (highlight == nil) {
+            return;
+        }
+        super.highlightValue(highlight, callDelegate: callDelegate);
+    }
+    
     internal func drawHightedValueAtTop(context : CGContext) {
         if (!valuesToHighlight()) {
             return;
