@@ -148,7 +148,25 @@ class LineChartOnlyHighlightDrag: LineChartView
 
 class NotchXAxisRenderer : XAxisRenderer {
     override func drawLabel(context: CGContext, formattedLabel: String, x: CGFloat, y: CGFloat, attributes: [NSAttributedString.Key : Any], constrainedToSize: CGSize, anchor: CGPoint, angleRadians: CGFloat) {
-        super.drawLabel(context: context, formattedLabel: formattedLabel, x: x, y: y, attributes: attributes, constrainedToSize: constrainedToSize, anchor: anchor, angleRadians: angleRadians);
+        
+        guard
+            let xAxis = self.axis as? XAxis
+            else { return }
+        
+        let paraStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
+        paraStyle.alignment = .center
+        
+        let labelAttrs: [NSAttributedString.Key : Any] = [
+            .font: xAxis.labelFont,
+            .foregroundColor: xAxis.labelTextColor,
+            .paragraphStyle: paraStyle
+        ]
+        let labelNS = formattedLabel as NSString;
+        let width = labelNS.size(withAttributes: labelAttrs).width;
+        let offsetX = min(x, viewPortHandler.contentRight + 10 - width/2);
+        
+        super.drawLabel(context: context, formattedLabel: formattedLabel, x: offsetX, y: y, attributes: attributes, constrainedToSize: constrainedToSize, anchor: anchor, angleRadians: angleRadians);
+        
         context.saveGState();
         context.move(to: CGPoint(x: x, y: y - 8));
         context.addLine(to: CGPoint(x: x, y: y));

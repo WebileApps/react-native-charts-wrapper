@@ -65,7 +65,9 @@ public class LineChartManager extends BarLineChartBaseManager<LineChart, Entry> 
                      */
                     @Override
                     protected void drawLabel(Canvas c, String formattedLabel, float x, float y, MPPointF anchor, float angleDegrees) {
-                        super.drawLabel(c, formattedLabel, x, y, anchor, angleDegrees);
+                        int textWidth = Utils.calcTextWidth(this.getPaintAxisLabels(), formattedLabel);
+                        float offsetX = Math.min(this.mViewPortHandler.contentRight() + Utils.convertDpToPixel(10) - textWidth / 2 , x );
+                        super.drawLabel(c, formattedLabel, offsetX, y, anchor, angleDegrees);
                         c.save();
                         float width = mXAxisRenderer.getPaintAxisLine().getStrokeWidth();
                         mXAxisRenderer.getPaintAxisLine().setStrokeWidth(2 * width);
