@@ -118,6 +118,9 @@ class LineChartOnlyHighlightDrag: LineChartView
     override func getHighlightByTouchPoint(_ pt: CGPoint) -> Highlight? {
         if (viewPortHandler.isInBoundsX(pt.x)) {
             let highlight = super.getHighlightByTouchPoint(pt);
+            if (!viewPortHandler.isInBoundsX(highlight?.xPx ?? 0)) {
+                return nil;
+            }
             if (!(highlight?.isEqual(lastHighlighted) ?? true)) {
                 return highlight;
             }
