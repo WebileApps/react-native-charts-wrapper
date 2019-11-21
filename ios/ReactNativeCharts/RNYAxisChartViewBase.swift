@@ -20,6 +20,14 @@ class RNYAxisChartViewBase: RNChartViewBase {
         if config["spaceTop"].float != nil {
             axis.spaceTop = CGFloat(config["spaceTop"].floatValue)
         }
+        
+        if config["minWidth"].float != nil {
+            axis.minWidth = CGFloat(config["minWidth"].floatValue)
+        }
+        
+        if config["maxWidth"].float != nil {
+            axis.maxWidth = CGFloat(config["maxWidth"].floatValue)
+        }
 
         if config["spaceBottom"].float != nil {
             axis.spaceBottom = CGFloat(config["spaceBottom"].floatValue)

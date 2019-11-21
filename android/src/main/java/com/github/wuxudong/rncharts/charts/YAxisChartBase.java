@@ -24,6 +24,12 @@ public abstract class YAxisChartBase<T extends Chart, U extends Entry> extends C
         if (BridgeUtils.validate(propMap, ReadableType.Number, "spaceTop")) {
             axis.setSpaceTop((float) propMap.getDouble("spaceTop"));
         }
+        if (BridgeUtils.validate(propMap, ReadableType.Number, "minWidth")) {
+            axis.setMinWidth((float) propMap.getDouble("minWidth"));
+        }
+        if (BridgeUtils.validate(propMap, ReadableType.Number, "maxWidth")) {
+            axis.setMaxWidth((float) propMap.getDouble("maxWidth"));
+        }
         if (BridgeUtils.validate(propMap, ReadableType.Number, "spaceBottom")) {
             axis.setSpaceBottom((float) propMap.getDouble("spaceBottom"));
         }
