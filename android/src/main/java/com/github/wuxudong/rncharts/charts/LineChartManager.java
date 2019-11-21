@@ -60,7 +60,7 @@ public class LineChartManager extends BarLineChartBaseManager<LineChart, Entry> 
                     protected void performHighlight(Highlight h, MotionEvent e) {
 
                         if (mViewPortHandler.isInBounds(h.getXPx(), h.getYPx())) {
-                            if (!h.equalTo(mLastHighlighted)) {
+                            if (h!= null && !h.equalTo(mLastHighlighted)) {
                                 super.performHighlight(h, e);
                             }
                         }
