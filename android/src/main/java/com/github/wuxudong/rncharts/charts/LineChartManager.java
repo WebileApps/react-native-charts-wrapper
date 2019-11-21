@@ -14,7 +14,6 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineScatterCandleRadarDataSet;
-import com.github.mikephil.charting.listener.BarLineChartTouchListener;
 import com.github.mikephil.charting.renderer.LineChartRenderer;
 import com.github.mikephil.charting.renderer.XAxisRenderer;
 import com.github.mikephil.charting.utils.MPPointF;
@@ -59,8 +58,19 @@ public class LineChartManager extends BarLineChartBaseManager<LineChart, Entry> 
                     @Override
                     protected void performHighlight(Highlight h, MotionEvent e) {
 
-                        if (mViewPortHandler.isInBounds(h.getXPx(), h.getYPx())) {
-                            if (h!= null && !h.equalTo(mLastHighlighted)) {
+                        if (h!= null && mViewPortHandler.isInBounds(h.getXPx(), h.getYPx())) {
+                            if (!h.equalTo(mLastHighlighted)) {
+                                super.performHighlight(h, e);
+                            }
+                        }
+                    }
+
+                    @Override
+                    protected void performHighlightDrag(MotionEvent e) {
+                        Highlight h = mChart.getHighlightByTouchPoint(e.getX(), e.getY());
+
+                        if (h!= null && mViewPortHandler.isInBounds(h.getXPx(), h.getYPx())) {
+                            if (!h.equalTo(mLastHighlighted)) {
                                 super.performHighlight(h, e);
                             }
                         }
