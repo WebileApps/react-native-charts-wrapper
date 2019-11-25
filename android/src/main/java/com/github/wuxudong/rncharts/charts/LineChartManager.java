@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.highlight.Highlight;
@@ -54,6 +55,18 @@ public class LineChartManager extends BarLineChartBaseManager<LineChart, Entry> 
 
                 super.init();
 
+                this.mXAxis = new XAxis() {
+                    @Override
+                    public String getFormattedLabel(int index) {
+                        String formattedLabel = super.getFormattedLabel(index);
+                        String[] parts = formattedLabel.split(" ");
+                        if (parts.length != 3) {
+                            return formattedLabel;
+                        }
+                        return parts[1]+" "+parts[2];
+                    }
+                };
+
                 this.setOnTouchListener(new BarLineChartTouchListener(this, mViewPortHandler.getMatrixTouch(), 3f){
                     @Override
                     protected void performHighlight(Highlight h, MotionEvent e) {
@@ -78,6 +91,9 @@ public class LineChartManager extends BarLineChartBaseManager<LineChart, Entry> 
                 });
 
                 this.setXAxisRenderer( new XAxisRenderer(this.mViewPortHandler, this.mXAxis, this.mLeftAxisTransformer) {
+
+                    static final int MIN_DAYS = 28;
+
                     /**
                      * Customized to draw notch above the label.
                      * @param c
@@ -89,6 +105,10 @@ public class LineChartManager extends BarLineChartBaseManager<LineChart, Entry> 
                      */
                     @Override
                     protected void drawLabel(Canvas c, String formattedLabel, float x, float y, MPPointF anchor, float angleDegrees) {
+                        String[] parts = formattedLabel.split(" ");
+                        if (parts.length == 3) {
+                            formattedLabel = parts[1] + " " + parts[2];
+                        }
                         int textWidth = Utils.calcTextWidth(this.getPaintAxisLabels(), formattedLabel);
                         float offsetX = Math.min(this.mViewPortHandler.contentRight() + Utils.convertDpToPixel(10) - textWidth / 2 , x );
                         super.drawLabel(c, formattedLabel, offsetX, y, anchor, angleDegrees);
@@ -98,6 +118,55 @@ public class LineChartManager extends BarLineChartBaseManager<LineChart, Entry> 
                         c.drawLine(x, y- Utils.convertDpToPixel(8), x, y, mXAxisRenderer.getPaintAxisLine());
                         mXAxisRenderer.getPaintAxisLine().setStrokeWidth(width);
                         c.restore();
+                    }
+
+                    @Override
+                    protected void computeAxisValues(float min, float max) {
+
+                        if (mAxis.isForceLabelsEnabled()) {
+                            DateFormatter dateFormatter = (DateFormatter) mAxis.getValueFormatter();
+                            float currentValue = min;
+                            int currentIndex = 0;
+                            if (this.getDateOfMonth(dateFormatter.getFormattedValue(min)) <= 3) {
+                                mAxis.mEntries[currentIndex] = currentValue;
+                                currentValue = currentValue + MIN_DAYS;
+                                currentIndex++;
+                            } else {
+                                while(currentValue < min + MIN_DAYS) {
+                                    if (this.getDateOfMonth(dateFormatter.getFormattedValue(currentValue)) == 1) {
+                                        //current Value is the 1st day of a month.
+                                        mAxis.mEntries[currentIndex] = currentValue;
+                                        currentValue = currentValue + MIN_DAYS;
+                                        currentIndex++;
+                                        break;
+                                    } else {
+                                        currentValue++;
+                                    }
+                                }
+                            }
+                            while (currentValue <= max && currentIndex < 6) {
+                                if (this.getDateOfMonth(dateFormatter.getFormattedValue(currentValue)) == 1) {
+                                    //current Value is the 1st day of a month.
+                                    mAxis.mEntries[currentIndex] = currentValue;
+                                    currentValue = currentValue + MIN_DAYS;
+                                    currentIndex++;
+                                } else {
+                                    currentValue++;
+                                }
+                            }
+                            mAxis.mEntryCount = currentIndex;
+                            computeSize();
+                            return;
+                        }
+                        super.computeAxisValues(min, max);
+                    }
+
+                    private int getDateOfMonth(String formattedValue) {
+                        try {
+                            return Integer.parseInt(formattedValue.split(" ")[0]);
+                        } catch (Exception e) {
+                            return 1;
+                        }
                     }
                 });
 
