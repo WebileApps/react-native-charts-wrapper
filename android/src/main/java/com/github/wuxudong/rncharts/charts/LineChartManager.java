@@ -127,6 +127,7 @@ public class LineChartManager extends BarLineChartBaseManager<LineChart, Entry> 
                             DateFormatter dateFormatter = (DateFormatter) mAxis.getValueFormatter();
                             float currentValue = min;
                             int currentIndex = 0;
+                            mAxis.mEntries = new float[8];
                             if (this.getDateOfMonth(dateFormatter.getFormattedValue(min)) <= 3) {
                                 mAxis.mEntries[currentIndex] = currentValue;
                                 currentValue = currentValue + MIN_DAYS;

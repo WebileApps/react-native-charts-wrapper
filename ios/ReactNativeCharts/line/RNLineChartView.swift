@@ -24,7 +24,7 @@ class RNLineChartView: RNBarLineChartViewBase {
         
         super.init(frame: frame);
         
-        self._chart.delegate = self
+        self._chart.delegate = self;
         self._chart.xAxisRenderer = NotchXAxisRenderer(viewPortHandler: self._chart.viewPortHandler, xAxis: self._chart.xAxis, transformer: self._chart.getTransformer(forAxis: YAxis.AxisDependency.left));
         self.addSubview(_chart);
         
@@ -173,6 +173,8 @@ class NotchXAxisRenderer : XAxisRenderer {
             let xAxis = self.axis as? XAxis
             else { return }
         
+        let formattedLabel = getFormattedLabel(formattedLabel: formattedLabel);
+        
         let paraStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
         paraStyle.alignment = .center
         
@@ -194,6 +196,57 @@ class NotchXAxisRenderer : XAxisRenderer {
         context.setLineWidth(2 * (self.axis?.axisLineWidth ?? 0.5));
         context.drawPath(using: CGPathDrawingMode.stroke);
         context.restoreGState();
+    }
+    
+    func getFormattedLabel(formattedLabel: String) -> String
+    {
+        let parts = formattedLabel.components(separatedBy:" ");
+        if (parts.count != 3) {
+            return formattedLabel;
+        }
+        return parts[1]+" "+parts[2];
+    }
+    
+    func getDateOfMonth(_ formattedValue : String) -> Int {
+        return ((Int)(formattedValue.components(separatedBy: " ")[0]) ?? 1);
+        
+    }
+    
+    override func computeAxisValues(min: Double, max: Double) {
+        if (self.axis?.isForceLabelsEnabled ?? false) {
+            let MIN_DAYS : Double = 28;
+            let dateFormatter = self.axis?.valueFormatter ?? DefaultAxisValueFormatter();
+            var currentValue : Double = min;
+            self.axis?.entries.removeAll(keepingCapacity: false);
+            self.axis?.entries.reserveCapacity(8);
+            if (self.getDateOfMonth(dateFormatter.stringForValue(min, axis: nil)) <= 3) {
+                self.axis?.entries.append(currentValue);
+                currentValue = currentValue + MIN_DAYS;
+            } else {
+                while(currentValue < min + MIN_DAYS) {
+                    if (self.getDateOfMonth(dateFormatter.stringForValue(currentValue, axis: nil)) == 1) {
+                        //current Value is the 1st day of a month.
+                        self.axis?.entries.append(currentValue);
+                        currentValue = currentValue + MIN_DAYS;
+                        break;
+                    } else {
+                        currentValue += 1;
+                    }
+                }
+            }
+            while (currentValue <= max && self.axis?.entries.count ?? 10 <= 6) {
+                if (self.getDateOfMonth(dateFormatter.stringForValue(currentValue, axis: nil)) == 1) {
+                    //current Value is the 1st day of a month.
+                    self.axis?.entries.append(currentValue);
+                    currentValue = currentValue + MIN_DAYS;
+                } else {
+                    currentValue += 1;
+                }
+            }
+            computeSize();
+            return;
+        }
+        super.computeAxisValues(min: min, max: max);
     }
 }
 
