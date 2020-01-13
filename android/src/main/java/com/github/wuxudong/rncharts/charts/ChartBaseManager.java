@@ -428,7 +428,7 @@ public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends
 
             if ("largeValue".equals(valueFormatter)) {
                 LargeValueFormatter formatter = new LargeValueFormatter();
-                formatter.setMaxLength(3);
+                formatter.setMaxLength(4);
                 axis.setValueFormatter(formatter);
             } else if ("percent".equals(valueFormatter)) {
                 axis.setValueFormatter(new PercentFormatter());
